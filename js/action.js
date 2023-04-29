@@ -24,7 +24,7 @@ export const ActionElementState = Object.freeze({
  * @typedef ActionElement
  * @readonly
  * @property {function(): RaidBuff|undefined} getRaidBuff - Returns the associated RaidBuff for this element.
- * @property {function(ActionElementState): void} setState - Sets the state of the element.
+ * @property {function(ActionElementState, {any}|undefined): void} setState - Sets the state of the element.
  * @property {function(): ActionElementState} getState - Returns the current state of the element.
  */
 
@@ -149,6 +149,7 @@ export class Action {
                     return this;
                 }).bind(this),
                 setState: (function (state, data) {
+                    console.log(this, state);
                     switch (state) {
                         case ActionElementState.Active:
                             this.setAttribute("time", Date.now());

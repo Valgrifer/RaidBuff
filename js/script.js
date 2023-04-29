@@ -61,7 +61,7 @@ const RESET = () => {
 /**
  * Retourne un tableau contenant uniquement le personnage actuel.
  *
- * @returns {Array} - Tableau contenant le personnage actuel.
+ * @returns {Player[]} - Tableau contenant le personnage actuel.
  */
 const solo = () => {
     return [self];
@@ -99,6 +99,7 @@ addOverlayListener('LogLine', (data) => {
     if(data.line[0] === "21" || data.line[0] === "22")
     {
         const player = party.find(player => player.id === data.line[2]);
+        console.log(player, party, data);
 
         if(!player)
             return;
