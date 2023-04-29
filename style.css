@@ -36,7 +36,7 @@ html, body
 	margin: 0;
 }
 
-.buff
+.action
 {
 	position: relative;
 	
@@ -59,17 +59,17 @@ html, body
 	font-size: 25px;
 }
 
-.buff.active
+.action.active
 {
 	order: 0;
 }
 
-.buff.up
+.action.up
 {
 	order: 100;
 }
 
-.buff::before
+.action::before
 {
 	content: "";
 	position: absolute;
@@ -85,7 +85,7 @@ html, body
     -webkit-text-stroke: 0 transparent;
 }
 
-.buff::after
+.action::after
 {
 	content: "";
 	position: absolute;
@@ -98,13 +98,13 @@ html, body
 	border-radius: 5px;
 }
 
-.buff.active::after
+.action.active::after
 {
 	background-color: transparent;
 	background-image: url(Combo.gif);
 }
 
-.buff.up::after
+.action.up::after
 {
 	background-color: transparent;
 }
