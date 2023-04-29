@@ -75,14 +75,16 @@ const solo = () => {
  * Ajoute ou supprime la classe "unlocked" du corps du document en fonction de l'état de verrouillage.
  *
  * @event onOverlayStateUpdate
+ * @param {Object} data - Les données fournies lors de l'événement.
+ * @param {boolean} data.detail.isLocked - Si l'overlay est bloqué ou pas
  */
 document.addEventListener("onOverlayStateUpdate", (data) => {
     let bodyClassList = document.querySelector("body").classList;
     // noinspection JSUnresolvedReference
     if(data.detail.isLocked)
-        bodyClassList.classList.remove("unlocked");
+        bodyClassList.remove("unlocked");
     else
-        bodyClassList.classList.add("unlocked");
+        bodyClassList.add("unlocked");
 });
 
 /**
@@ -90,6 +92,8 @@ document.addEventListener("onOverlayStateUpdate", (data) => {
  * Gère les lignes de log liées aux actions et à la mise à jour les éléments d'action correspondants.
  *
  * @event LogLine
+ * @param {Object} data - Les données fournies lors de l'événement.
+ * @param {string[]} data.line - Donnée split de la line de donnée
  */
 addOverlayListener('LogLine', (data) => {
     if(data.line[0] === "21" || data.line[0] === "22")
