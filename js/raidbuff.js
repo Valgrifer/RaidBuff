@@ -1,5 +1,5 @@
-import {ActionJobLevel, Jobs} from "./utils";
-import {Action, ActionElementState} from "./Action";
+import {ActionJobLevel, Jobs} from "./utils.js";
+import {Action, ActionElementState} from "./action.js";
 
 export class RaidBuff extends Action {
     /**

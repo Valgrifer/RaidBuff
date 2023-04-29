@@ -1,7 +1,7 @@
 import {styleReset} from "./pseudoStyles.js";
-import {ActionElementState} from "./Action";
-import {getAllActionElement, REGISTRIES} from "./registry";
-import {idToJob, Jobs, nameToId} from "./utils";
+import {ActionElementState} from "./action.js";
+import {getAllActionElement, REGISTRIES} from "./registry.js";
+import {idToJob, Jobs, nameToId} from "./utils.js";
 
 /**
  * Type représentant un joueur.

@@ -1,4 +1,4 @@
-import {ActionElementState, cssClass} from "./Action";
+import {ActionElementState, cssClass} from "./action.js";
 
 
 /**

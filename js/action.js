@@ -1,4 +1,4 @@
-import {Before} from "./pseudoStyles";
+import {Before} from "./pseudoStyles.js";
 
 export const cssClass = "action";
 

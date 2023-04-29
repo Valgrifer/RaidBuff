@@ -1,6 +1,6 @@
-import {RaidBuff} from "./raidbuff";
-import {ActionJobLevel, Jobs} from "./utils";
-import {Registry} from "./registry";
+import {RaidBuff} from "./raidbuff.js";
+import {ActionJobLevel, Jobs} from "./utils.js";
+import {Registry} from "./registry.js";
 export function run() {
     const RaidBuffRegistry = new Registry('RaidBuff', document.querySelector(".container"));
 
