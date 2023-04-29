@@ -144,44 +144,45 @@ export class Action {
             div.id = this.getName() + player;
 
             /** @type {ActionElement} */
-            div._classAction = {};
-            div._classAction.getRaidBuff = (function () {
+            console.log(div._classAction = {
+                getRaidBuff: (function () {
                     return this;
-                }).bind(this);
-            div._classAction.setState = (function (state, data) {
-                console.log(this, state);
-                switch (state) {
-                    case ActionElementState.Active:
-                        this.setAttribute("time", Date.now());
-                        this.classList.add("active");
-                        this.classList.remove("up");
-                        this.innerHTML = "" + this.time;
-                        this.pseudoStyle(Before, "content", `"${this.getAction().getRaidBuff().getDescription(data)}"`)
-                            .pseudoStyle(Before, "background-color", "black")
-                        break;
-                    case ActionElementState.Fade:
-                        this.classList.remove("active");
-                        this.classList.remove("up");
-                        this.innerHTML = "" + (this.cd - this.time);
-                        this.pseudoStyle(Before, "content", '""')
-                            .pseudoStyle(Before, "background-color", "transparent")
-                        break;
-                    case ActionElementState.Up:
-                        this.classList.remove("active");
-                        this.classList.add("up");
-                        this.innerHTML = "";
-                        this.style.order = null;
-                        break;
-                }
-            }).bind(div);
-        div._classAction.getState = (function () {
-                if(this.classList.contains("active"))
-                    return ActionElementState.Active
-                else if(this.classList.contains("up"))
-                    return ActionElementState.Up
-                else
-                    return ActionElementState.Fade
-            }).bind(div);
+                }).bind(this),
+                setState: (function (state, data) {
+                    console.log(this, state);
+                    switch (state) {
+                        case ActionElementState.Active:
+                            this.setAttribute("time", Date.now());
+                            this.classList.add("active");
+                            this.classList.remove("up");
+                            this.innerHTML = "" + this.time;
+                            this.pseudoStyle(Before, "content", `"${this.getAction().getRaidBuff().getDescription(data)}"`)
+                                .pseudoStyle(Before, "background-color", "black")
+                            break;
+                        case ActionElementState.Fade:
+                            this.classList.remove("active");
+                            this.classList.remove("up");
+                            this.innerHTML = "" + (this.cd - this.time);
+                            this.pseudoStyle(Before, "content", '""')
+                                .pseudoStyle(Before, "background-color", "transparent")
+                            break;
+                        case ActionElementState.Up:
+                            this.classList.remove("active");
+                            this.classList.add("up");
+                            this.innerHTML = "";
+                            this.style.order = null;
+                            break;
+                    }
+                }).bind(div),
+                getState: (function () {
+                    if(this.classList.contains("active"))
+                        return ActionElementState.Active
+                    else if(this.classList.contains("up"))
+                        return ActionElementState.Up
+                    else
+                        return ActionElementState.Fade
+                }).bind(div),
+            });
 
             this.getRegistry().getContainer().appendChild(div);
             this.getPlayers().push(player);
