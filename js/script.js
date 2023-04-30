@@ -1,7 +1,7 @@
 import {styleReset} from "./pseudoStyles.js";
 import {ActionElementState} from "./action/action.js";
-import {getAllActionElement, REGISTRIES} from "./registry.js";
-import {idToJob, Jobs, nameToId} from "./utils.js";
+import {REGISTRIES} from "./registry.js";
+import {Jobs, nameToId, playerParser} from "./utils.js";
 
 /**
  * Type représentant un joueur.
@@ -40,6 +40,7 @@ const UPDATE = () => {
 let doReset = false;
 const reset = () => {
     doReset = true;
+    console.log(party);
 };
 
 /**
@@ -48,7 +49,7 @@ const reset = () => {
 const RESET = () => {
     doReset = false;
 
-    getAllActionElement().forEach((e) => e.remove());
+    Object.values(REGISTRIES).forEach(registry => registry.getActions().forEach(ac => ac.reset()));
 
     styleReset();
 
@@ -113,28 +114,29 @@ addOverlayListener('LogLine', (data) => {
     }
     else if(data.line[0] === "03")
     {
-        if(party.length <= 1)
-        {
-            if(data.line[3] !== self.name)
-                return;
+        let player = party.find(player => data.line[3] === player.name);
 
-            self.id = data.line[2];
-            self.job = idToJob(parseInt(data.line[4], 16));
-            self.level = parseInt(data.line[5], 16);
-            party = solo();
-            reset();
-        }
-        else
+        if(!player)
         {
-            const player = party.find(player => player.id === data.line[3]);
+            if(party.length <= 1)
+                player = self;
 
             if(!player)
                 return;
-
-            player.job = idToJob(parseInt(data.line[4], 16));
-            player.level = parseInt(data.line[5], 16);
-            reset();
         }
+
+        player = playerParser({...player,
+            id: data.line[2],
+            job: parseInt(data.line[4], 16),
+            level: parseInt(data.line[5], 16),
+        });
+
+        if(party.length <= 1)
+        {
+            self = player;
+            party = solo();
+        }
+        reset();
     }
     else if(data.line[0] === "33" && (data.line[3].substring(6) === "0F" ||  data.line[3].substring(6) === "03"))
         reset();
@@ -167,12 +169,7 @@ addOverlayListener("ChangePrimaryPlayer", (data) => {
         if(!player)
             return;
 
-        // noinspection JSUnresolvedReference
-        self.id = player.ID;
-        // noinspection JSUnresolvedReference
-        self.job = idToJob(player.Job);
-        // noinspection JSUnresolvedReference
-        self.level = player.Level;
+        self = playerParser(player);
 
         if(party.length <= 1)
         {
@@ -184,7 +181,7 @@ addOverlayListener("ChangePrimaryPlayer", (data) => {
 
 addOverlayListener("PartyChanged", (data) => {
     // noinspection JSUnresolvedReference
-    party = data.party.length > 0 ? data.party.map(player => ({...player, job: idToJob(player.Job)})) : solo();
+    party = data.party.length > 0 ? data.party.map(player => (playerParser(player))) : solo();
     reset();
 });
 

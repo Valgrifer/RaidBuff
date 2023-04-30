@@ -21,7 +21,6 @@ export class RaidBuff extends Action {
         this.cd = cd;
         this.time = time;
         this.desc = desc;
-        this.buffs = [];
 
         console.log("Register Buff: \"" + name + "\"\t\t with id (" + id + "),\t\t Cool-down: " + cd + "s ,\t\t Duration: " + time + "s,\t\t Desc:" + desc);
     }
@@ -49,7 +48,7 @@ export class RaidBuff extends Action {
 
             if(time)
             {
-                timer = (now - time) / 1000;
+                timer = (now - time) / 1000 + 1;
 
                 if(action.getState() === ActionElementState.Active)
                 {

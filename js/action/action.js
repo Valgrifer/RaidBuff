@@ -160,6 +160,14 @@ export class Action {
      */
     getPlayers()
     { return this._players; }
+
+    reset()
+    {
+        this.getPlayers().map(this.getElement.bind(this)).forEach(e => e.remove())
+        this._players = [];
+    }
+
+
     /**
      * Returns the HTML element associated with the action and player.
      * @param {string} player - The player name.
@@ -168,7 +176,7 @@ export class Action {
     getElement(player)
     {
         /** @type {HTMLElement} */
-        let div = this.getRegistry().getContainer().querySelector(`.${cssClass}#${this.getName()}${player}`);
+        let div = this.getRegistry().getContainer().querySelector(`.${cssClass}#${this.getName() + player}`);
 
         if(!div)
         {
