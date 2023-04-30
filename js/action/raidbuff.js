@@ -1,6 +1,8 @@
-import {ActionJobLevel, Jobs} from "./utils.js";
+import {ActionJobLevel, Jobs} from "../utils.js";
 import {Action, ActionElementState} from "./action.js";
+import {Before} from "../pseudoStyles.js";
 
+// noinspection JSCheckFunctionSignatures
 export class RaidBuff extends Action {
     /**
      * Creates an instance of the RaidBuff class.
@@ -34,9 +36,9 @@ export class RaidBuff extends Action {
 
         let b, el, action, time, timer, toShow, toShowRound;
 
-        for (let i = 0; i < this.buffs.length; i++)
+        for (let i = 0; i < this.getPlayers().length; i++)
         {
-            b = this.buffs[i];
+            b = this.getPlayers()[i];
             el = this.getElement(b);
             action = el.getAction();
 
@@ -64,7 +66,7 @@ export class RaidBuff extends Action {
 
                 this.getRegistry().getOrder().push({element: el, timer: toShow});
                 toShowRound = Math.floor(toShow);
-                if(toShowRound >= 0 && el.innerHTML !== toShowRound)
+                if(toShowRound >= 0 && parseInt(el.innerHTML) !== toShowRound)
                     if(toShowRound !== undefined)
                         el.innerHTML = toShowRound;
                     else
@@ -81,5 +83,39 @@ export class RaidBuff extends Action {
     getDescription(data)
     {
         return typeof this.desc === 'string' ? this.desc : (typeof this.desc === 'function' ? this.desc(data) : '');
+    }
+
+    /**
+     * Sets the state of the action element for the specified player.
+     * @param {string|HTMLElement} element - The player name or Element Action.
+     * @param {ActionElementState} state - The state to set.
+     * @param {{any}|undefined} data - Additional data for setting the state.
+     */
+    setState(element, state, data = undefined)
+    {
+        element = element instanceof HTMLElement ? element :  this.getElement(element);
+        switch (state) {
+            case ActionElementState.Active:
+                element.setAttribute("time", "" + Date.now());
+                element.classList.add("active");
+                element.classList.remove("up");
+                element.innerHTML = "" + this.time;
+                element.pseudoStyle(Before, "content", `"${this.getDescription(data)}"`)
+                    .pseudoStyle(Before, "background-color", "black");
+                break;
+            case ActionElementState.Fade:
+                element.classList.remove("active");
+                element.classList.remove("up");
+                element.innerHTML = "" + (this.cd - this.time);
+                element.pseudoStyle(Before, "content", '""')
+                    .pseudoStyle(Before, "background-color", "transparent");
+                break;
+            case ActionElementState.Up:
+                element.classList.remove("active");
+                element.classList.add("up");
+                element.innerHTML = "";
+                element.style.order = null;
+                break;
+        }
     }
 }

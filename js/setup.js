@@ -1,4 +1,4 @@
-import {RaidBuff} from "./raidbuff.js";
+import {RaidBuff} from "./action/raidbuff.js";
 import {ActionJobLevel, Jobs} from "./utils.js";
 import {Registry} from "./registry.js";
 export function run() {

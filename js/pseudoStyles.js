@@ -23,16 +23,17 @@ HTMLElement.prototype.pseudoStyle = function(pseudoElement, attribute, value)
     pseudoElementStyles[pseudoElement] = elementStyles;
 
     let cssRules = "";
-    for (const pseudoElement in pseudoElementStyles)
+    for (const pseudoElement of Object.keys(pseudoElementStyles))
     {
         const elementStyles = pseudoElementStyles[pseudoElement];
-        for (const elementId in elementStyles)
+        for (const elementId of Object.keys(elementStyles))
         {
             const styles = elementStyles[elementId];
             cssRules += ` #${elementId}:${pseudoElement} {`;
 
-            for (const attribut in styles)
-                cssRules += `${attribute}:${styles[attribute]};`;
+            for (const attribut of Object.keys(styles)) {
+                cssRules += `${attribut}:${styles[attribut]};`;
+            }
 
             cssRules += "}";
         }

@@ -1,5 +1,3 @@
-import {Before} from "./pseudoStyles.js";
-
 export const cssClass = "action";
 
 /**
@@ -21,22 +19,59 @@ export const ActionElementState = Object.freeze({
 
 /**
  * Represents an action element.
- * @typedef ActionElement
- * @readonly
- * @property {function(): RaidBuff|undefined} getRaidBuff - Returns the associated RaidBuff for this element.
- * @property {function(ActionElementState, {any}|undefined): void} setState - Sets the state of the element.
- * @property {function(): ActionElementState} getState - Returns the current state of the element.
+ * @class
  */
+class ActionElement {
+    /**
+     * Create an instance of ActionElement.
+     * @param {HTMLElement} element - The HTML element representing the action element.
+     * @param {Action} mainAction - The associated MainAction for this element.
+     */
+    constructor(element, mainAction) {
+        this.element = element;
+        this.mainAction = mainAction;
+    }
+
+    /**
+     * Returns the associated MainAction for this element.
+     * @returns {Action} The associated MainAction.
+     */
+    getMainAction() {
+        return this.mainAction;
+    }
+
+    /**
+     * Sets the state of the element.
+     * @param {ActionElementState} state - The state to set.
+     * @param {{any}|undefined} data - Optional data associated with the state.
+     */
+    setState(state, data = undefined) {
+        this.getMainAction().setState(this.element, state, data);
+    }
+
+    /**
+     * Returns the current state of the element.
+     * @returns {ActionElementState} The current state of the element.
+     */
+    getState() {
+        if (this.element.classList.contains("active"))
+            return ActionElementState.Active;
+        else if (this.element.classList.contains("up"))
+            return ActionElementState.Up;
+        else
+            return ActionElementState.Fade;
+    }
+}
 
 /**
  * Represents the null action element state.
  * @type ActionElement
  */
-const NullActionElementState = Object.freeze({
-    getRaidBuff() {return undefined},
-    setState() {},
-    getState() {return undefined},
-});
+const NullActionElementState = new class extends ActionElement {
+    getMainAction() {return undefined;}
+    setState(state, data) {}
+    getState() {return undefined;}
+} (null, null);
 
 /**
  * Returns the associated action for the HTML element.
@@ -44,7 +79,7 @@ const NullActionElementState = Object.freeze({
  */
 HTMLElement.prototype.getAction = function() {
     // noinspection JSUnresolvedVariable
-    return this._action ?? NullActionElementState;
+    return this._classAction ?? NullActionElementState;
 }
 
 // noinspection JSUnusedGlobalSymbols
@@ -143,46 +178,7 @@ export class Action {
             div.style.backgroundImage = `url("${this.getImage()}")`;
             div.id = this.getName() + player;
 
-            /** @type {ActionElement} */
-            console.log(div._classAction = {
-                getRaidBuff: (function () {
-                    return this;
-                }).bind(this),
-                setState: (function (state, data) {
-                    console.log(this, state);
-                    switch (state) {
-                        case ActionElementState.Active:
-                            this.setAttribute("time", Date.now());
-                            this.classList.add("active");
-                            this.classList.remove("up");
-                            this.innerHTML = "" + this.time;
-                            this.pseudoStyle(Before, "content", `"${this.getAction().getRaidBuff().getDescription(data)}"`)
-                                .pseudoStyle(Before, "background-color", "black")
-                            break;
-                        case ActionElementState.Fade:
-                            this.classList.remove("active");
-                            this.classList.remove("up");
-                            this.innerHTML = "" + (this.cd - this.time);
-                            this.pseudoStyle(Before, "content", '""')
-                                .pseudoStyle(Before, "background-color", "transparent")
-                            break;
-                        case ActionElementState.Up:
-                            this.classList.remove("active");
-                            this.classList.add("up");
-                            this.innerHTML = "";
-                            this.style.order = null;
-                            break;
-                    }
-                }).bind(div),
-                getState: (function () {
-                    if(this.classList.contains("active"))
-                        return ActionElementState.Active
-                    else if(this.classList.contains("up"))
-                        return ActionElementState.Up
-                    else
-                        return ActionElementState.Fade
-                }).bind(div),
-            });
+            div._classAction = new ActionElement(div, this);
 
             this.getRegistry().getContainer().appendChild(div);
             this.getPlayers().push(player);
@@ -193,13 +189,14 @@ export class Action {
 
     /**
      * Sets the state of the action element for the specified player.
-     * @param {string} player - The player name.
+     * @param {string|HTMLElement} element - The player name or Element Action.
      * @param {ActionElementState} state - The state to set.
      * @param {{any}|undefined} data - Additional data for setting the state.
+     * @abstract
      */
-    setState(player, state, data = undefined)
+    setState(element, state, data = undefined)
     {
-        this.getElement(player)?.getAction()?.setState(state, data);
+        throw new Error("Method not implemented.");
     }
 
     /**

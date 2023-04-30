@@ -1,12 +1,12 @@
 import {styleReset} from "./pseudoStyles.js";
-import {ActionElementState} from "./action.js";
+import {ActionElementState} from "./action/action.js";
 import {getAllActionElement, REGISTRIES} from "./registry.js";
 import {idToJob, Jobs, nameToId} from "./utils.js";
 
 /**
  * Type représentant un joueur.
  * @typedef {Object} Player
- * @property {number|undefined} id - L'id' du joueur.
+ * @property {number} id - L'id' du joueur.
  * @property {string} name - Le nom du joueur.
  * @property {Job} job - L'objet représentant le job du joueur.
  * @property {number} level - Le niveau du joueur.
@@ -15,7 +15,7 @@ import {idToJob, Jobs, nameToId} from "./utils.js";
 /** @type {Player[]} */
 let party = [];
 /** @type {Player} */
-let self = {name: "", job: Jobs.NONE, level: 0};
+let self = {id: 0, name: "", job: Jobs.NONE, level: 0};
 
 /**
  * Fonction de mise à jour principale.
@@ -27,7 +27,9 @@ const UPDATE = () => {
         RESET();
         return;
     }
-    Object.values(REGISTRIES).forEach(registry => registry.update());
+
+    Object.values(REGISTRIES)
+        .forEach(registry => registry.update());
 };
 
 /**
@@ -98,8 +100,8 @@ document.addEventListener("onOverlayStateUpdate", (data) => {
 addOverlayListener('LogLine', (data) => {
     if(data.line[0] === "21" || data.line[0] === "22")
     {
-        const player = party.find(player => player.id === data.line[2]);
-        console.log(player, party, data);
+        const execId = parseInt(data.line[2], 16);
+        const player = party.find(player => player.id === execId);
 
         if(!player)
             return;
@@ -165,6 +167,8 @@ addOverlayListener("ChangePrimaryPlayer", (data) => {
         if(!player)
             return;
 
+        // noinspection JSUnresolvedReference
+        self.id = player.ID;
         // noinspection JSUnresolvedReference
         self.job = idToJob(player.Job);
         // noinspection JSUnresolvedReference
