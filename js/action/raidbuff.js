@@ -55,7 +55,7 @@ export class RaidBuff extends Action {
                 {
                     toShow = this.time - timer;
                     if(timer > this.time)
-                        action.setState(ActionElementState.Active);
+                        action.setState(ActionElementState.Fade);
                 }
                 else if(action.getState() === ActionElementState.Fade)
                 {
