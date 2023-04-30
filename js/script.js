@@ -40,7 +40,6 @@ const UPDATE = () => {
 let doReset = false;
 const reset = () => {
     doReset = true;
-    console.log(party);
 };
 
 /**

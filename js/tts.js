@@ -3,7 +3,6 @@ msg.voice = window.speechSynthesis.getVoices().find(el => el.default);
 
 /**
  * @param {string} text
- * @constructor
  */
 export function TTS(text) {
     msg.text = text;

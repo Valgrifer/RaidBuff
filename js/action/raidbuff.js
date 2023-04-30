@@ -48,7 +48,7 @@ export class RaidBuff extends Action {
 
             if(time)
             {
-                timer = (now - time) / 1000 + 1;
+                timer = (now - time) / 1000 - 1;
 
                 if(action.getState() === ActionElementState.Active)
                 {
