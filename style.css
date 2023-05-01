@@ -9,18 +9,6 @@
 	font-size: 14px !important;
 }
 
-.container
-{
-	display: flex;
-	flex-direction: row;
-	flex-wrap: wrap;
-	justify-content: flex-start;
-	align-items: flex-start;
-	align-content: flex-start;
-	
-	border: solid 10px transparent;
-}
-
 .unlocked {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAOwgAADsIBFShKgAAAABh0RVh0U29mdHdhcmUAcGFpbnQubmV0IDQuMC4zjOaXUAAAAGZJREFUOE+ljEEOACEIA92f+f9XaQ822EUgajJJC4xtvu+BPnEXFSBff7Bk5N8yw8pgW2aojLwdRHhy+YOTjMzhiUgGDB6ZjMyiVGTAgeV0rB1wqMusL7iIjrVb0mPtypMMGC7k1geoEhcn0OEM6wAAAABJRU5ErkJggg==);
   background-position: bottom right;
@@ -36,6 +24,46 @@ html, body
 	margin: 0;
 }
 
+body {
+    position: relative;
+    overflow: hidden;
+}
+
+body::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+
+.has-overflow-height::after {
+    border-bottom: 5px dotted red !important;
+}
+
+.has-overflow-width::after {
+    border-right: 5px dotted red !important;
+}
+
+.container
+{
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    align-content: flex-start;
+}
+
+#main {
+    position: absolute;
+    top: 0;
+    left: 0;
+    flex-direction: column;
+}
+
 .action
 {
 	position: relative;
@@ -48,6 +76,7 @@ html, body
 	order: 200;
 	
     background-size: cover;
+    flex: 0 0 auto;
 	
 	display: flex;
 	align-items: center;

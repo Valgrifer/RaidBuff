@@ -1,21 +1,11 @@
 import {styleReset} from "./pseudoStyles.js";
 import {ActionElementState} from "./action/action.js";
 import {REGISTRIES} from "./registry.js";
-import {Jobs, nameToId, playerParser} from "./utils.js";
+import {nameToId} from "./utils.js";
+import {cancelAllTTS} from "./tts.js";
+import {self, party, playerParser, solo} from "./playerParty.js";
 
-/**
- * Type représentant un joueur.
- * @typedef {Object} Player
- * @property {number} id - L'id' du joueur.
- * @property {string} name - Le nom du joueur.
- * @property {Job} job - L'objet représentant le job du joueur.
- * @property {number} level - Le niveau du joueur.
- */
-
-/** @type {Player[]} */
-let party = [];
-/** @type {Player} */
-let self = {id: 0, name: "", job: Jobs.NONE, level: 0};
+const MainContainer = document.querySelector(".container#main");
 
 /**
  * Fonction de mise à jour principale.
@@ -24,12 +14,39 @@ let self = {id: 0, name: "", job: Jobs.NONE, level: 0};
 const UPDATE = () => {
     if(doReset)
     {
-        RESET();
+        /**
+         * Réinitialise l'état des éléments d'action et les styles.
+         */
+        doReset = false;
+
+        cancelAllTTS();
+
+        Object.values(REGISTRIES).forEach(registry => registry.getActions().forEach(ac => ac.reset()));
+
+        styleReset();
+
+        party.forEach(player =>
+            Object.values(REGISTRIES).forEach(registry =>
+                registry.getActions()
+                    .filter(ac => ac.getActionJobLevel().job.id === player.job?.id && ac.getActionJobLevel().lvl <= player.level)
+                    .forEach(ac => ac.setState(nameToId(player.name), ActionElementState.Up))))
         return;
     }
 
     Object.values(REGISTRIES)
         .forEach(registry => registry.update());
+
+    // Vérification de la hauteur
+    if (MainContainer.clientHeight > window.innerHeight)
+        document.body.classList.add('has-overflow-height');
+    else
+        document.body.classList.remove('has-overflow-height');
+
+    // Vérification de la largeur
+    if (MainContainer.clientWidth > window.innerWidth)
+        document.body.classList.add('has-overflow-width');
+    else
+        document.body.classList.remove('has-overflow-width');
 };
 
 /**
@@ -38,35 +55,8 @@ const UPDATE = () => {
  * Utilisé pour réinitialiser l'état des éléments d'action.
  */
 let doReset = false;
-const reset = () => {
+export function reset(){
     doReset = true;
-};
-
-/**
- * Réinitialise l'état des éléments d'action et les styles.
- */
-const RESET = () => {
-    doReset = false;
-
-    Object.values(REGISTRIES).forEach(registry => registry.getActions().forEach(ac => ac.reset()));
-
-    styleReset();
-
-    party.forEach(player =>
-        Object.values(REGISTRIES).forEach(registry =>
-            registry.getActions()
-                .filter(ac => ac.getActionJobLevel().job.id === player.job?.id && ac.getActionJobLevel().lvl <= player.level)
-                .forEach(ac => ac.setState(nameToId(player.name), ActionElementState.Up))))
-};
-
-
-/**
- * Retourne un tableau contenant uniquement le personnage actuel.
- *
- * @returns {Player[]} - Tableau contenant le personnage actuel.
- */
-const solo = () => {
-    return [self];
 }
 
 
@@ -148,41 +138,6 @@ addOverlayListener('LogLine', (data) => {
  * @event ChangeZone
  */
 addOverlayListener("ChangeZone", reset);
-
-/**
- * Événement déclenché lors du changement du joueur principal.
- * Met à jour le nom, la classe et le niveau du personnage actuel en fonction des informations fournies.
- * Si le groupe ne contient qu'un seul joueur, appelle la fonction `solo()` pour mettre à jour le groupe.
- *
- * @event ChangePrimaryPlayer
- * @param {Object} data - Les données fournies lors de l'événement.
- * @param {string} data.charName - Le nom du joueur principal.
- * @param {Player[]} data.combatants - Liste des combatants
- * @function
- */
-addOverlayListener("ChangePrimaryPlayer", (data) => {
-    self.name = data.charName;
-    callOverlayHandler({ call: 'getCombatants' }).then(value => {
-        const player = value.combatants.find(player => player.Name === self.name);
-
-        if(!player)
-            return;
-
-        self = playerParser(player);
-
-        if(party.length <= 1)
-        {
-            party = solo();
-            reset();
-        }
-    });
-});
-
-addOverlayListener("PartyChanged", (data) => {
-    // noinspection JSUnresolvedReference
-    party = data.party.length > 0 ? data.party.map(player => (playerParser(player))) : solo();
-    reset();
-});
 
 (await import('./setup.js')).run();
 

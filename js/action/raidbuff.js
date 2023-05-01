@@ -33,45 +33,45 @@ export class RaidBuff extends Action {
     {
         let now = Date.now();
 
-        let b, el, action, time, timer, toShow, toShowRound;
+        let action, time, timer, toShow, toShowRound;
 
-        for (let i = 0; i < this.getPlayers().length; i++)
-        {
-            b = this.getPlayers()[i];
-            el = this.getElement(b);
+        this.getPlayers()
+            .map(this.getElement.bind(this)).forEach(el => {
             action = el.getAction();
 
             if(action.getState() === ActionElementState.Up)
-                continue;
+                return;
 
             time = el.getAttribute("time");
 
-            if(time)
+            if(!time)
+                return;
+
+            timer = (now - time) / 1000 - 1;
+
+            if(action.getState() === ActionElementState.Active)
             {
-                timer = (now - time) / 1000 - 1;
-
-                if(action.getState() === ActionElementState.Active)
-                {
-                    toShow = this.time - timer;
-                    if(timer > this.time)
-                        action.setState(ActionElementState.Fade);
-                }
-                else if(action.getState() === ActionElementState.Fade)
-                {
-                    toShow = this.cd - timer;
-                    if(timer > this.cd)
-                        action.setState(ActionElementState.Up);
-                }
-
-                this.getRegistry().getOrder().push({element: el, timer: toShow});
-                toShowRound = Math.floor(toShow);
-                if(toShowRound >= 0 && parseInt(el.innerHTML) !== toShowRound)
-                    if(toShowRound !== undefined)
-                        el.innerHTML = toShowRound;
-                    else
-                        el.innerHTML = "";
+                toShow = this.time - timer;
+                if(timer > this.time)
+                    action.setState(ActionElementState.Fade);
             }
-        }
+            else if(action.getState() === ActionElementState.Fade)
+            {
+                toShow = this.cd - timer;
+
+                if(timer > this.cd)
+                    action.setState(ActionElementState.Up);
+            }
+
+            this.getRegistry().getOrder().push({element: el, timer: toShow});
+            toShowRound = Math.floor(toShow);
+            // noinspection EqualityComparisonWithCoercionJS
+            if(toShowRound > 0 && el.innerHTML != toShowRound || toShowRound === 0 && el.innerHTML !== "")
+                if(toShowRound !== undefined && toShowRound !== 0)
+                    el.innerHTML = toShowRound;
+                else
+                    el.innerHTML = "";
+        });
     }
 
     /**

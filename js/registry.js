@@ -1,4 +1,4 @@
-import {ActionElementState, cssClass} from "./action/action.js";
+import {ActionElementState} from "./action/action.js";
 
 
 /**
@@ -9,6 +9,7 @@ import {ActionElementState, cssClass} from "./action/action.js";
  * @type {RegistryMap}
  */
 export const REGISTRIES = {};
+window._REGISTRIES = REGISTRIES;
 
 
 /**
@@ -125,9 +126,4 @@ export class Registry {
                 el.style.order = i + "" + 200;
         }
     }
-}
-
-export function getAllActionElement()
-{
-    return document.querySelectorAll(`.${cssClass}`);
 }

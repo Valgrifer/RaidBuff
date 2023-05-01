@@ -2,7 +2,7 @@ import {RaidBuff} from "./action/raidbuff.js";
 import {ActionJobLevel, Jobs} from "./utils.js";
 import {Registry} from "./registry.js";
 export function run() {
-    const RaidBuffRegistry = new Registry('RaidBuff', document.querySelector(".container"));
+    const RaidBuffRegistry = new Registry('RaidBuff', document.querySelector(".container#buff"));
 
     new RaidBuff(RaidBuffRegistry, "StratagemesEntrelaces", "1D0C", "https://xivapi.com/i/002000/002815_hr1.png", 120, 15, "10% CH", ActionJobLevel(Jobs.SCH, 66));
     new RaidBuff(RaidBuffRegistry, "Divination", "40A8", "https://xivapi.com/i/003000/003553_hr1.png", 120, 15, "6%", ActionJobLevel(Jobs.AST, 50));

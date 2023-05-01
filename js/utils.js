@@ -170,31 +170,10 @@ export function idToJob(id)
  * @param {Object} obj - L'objet a transformé
  * @returns {Object} - L'objet transformé avec des clés en minuscules.
  */
-const transformKeysToLowerCase = (obj) => {
+export function transformKeysToLowerCase(obj) {
     return Object.keys(obj).reduce((acc, key) => {
         const lowercaseKey = key.toLowerCase();
         acc[lowercaseKey] = obj[key];
         return acc;
     }, {});
-};
-
-/**
- * Analyse et transforme les données d'un joueur.
- *
- * @param {Object} data - Les données du joueur à analyser.
- * @property {number|string} id - L'ID du joueur.
- * @property {string} name - Le nom du joueur.
- * @property {number} job - L'ID du job du joueur.
- * @property {number} level - Le niveau du joueur.
- * @returns {Player} - L'objet joueur analysé.
- */
-export function playerParser(data) {
-    data = transformKeysToLowerCase(data);
-
-    if(typeof data.id === "string")
-        data.id = parseInt(data.id, 16);
-    if(typeof data.job === "number")
-        data.job = idToJob(data.job);
-
-    return data;
 }
