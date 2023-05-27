@@ -177,3 +177,11 @@ export function transformKeysToLowerCase(obj) {
         return acc;
     }, {});
 }
+
+/**
+ * Objet représentant une ligne de journal.
+ * @typedef {Object} LogLine
+ * @property {string} type - Le type de la ligne de journal.
+ * @property {string[]} line - Les éléments de la ligne de journal.
+ * @property {string} rawLine - La ligne de journal brute.
+ */

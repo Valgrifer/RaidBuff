@@ -3,7 +3,7 @@ import {ActionElementState} from "./action/action.js";
 import {REGISTRIES} from "./registry.js";
 import {nameToId} from "./utils.js";
 import {cancelAllTTS} from "./tts.js";
-import {self, party, playerParser, solo} from "./playerParty.js";
+import {self, party, playerParser, updatePlayer} from "./playerParty.js";
 
 const MainContainer = document.querySelector(".container#main");
 
@@ -72,7 +72,6 @@ export function reset(){
  */
 document.addEventListener("onOverlayStateUpdate", (data) => {
     let bodyClassList = document.querySelector("body").classList;
-    // noinspection JSUnresolvedReference
     if(data.detail.isLocked)
         bodyClassList.remove("unlocked");
     else
@@ -84,48 +83,43 @@ document.addEventListener("onOverlayStateUpdate", (data) => {
  * Gère les lignes de log liées aux actions et à la mise à jour les éléments d'action correspondants.
  *
  * @event LogLine
- * @param {Object} data - Les données fournies lors de l'événement.
- * @param {string[]} data.line - Donnée split de la line de donnée
+ * @param {LogLine} data - Les données fournies lors de l'événement.
  */
 addOverlayListener('LogLine', (data) => {
-    if(data.line[0] === "21" || data.line[0] === "22")
-    {
-        const execId = parseInt(data.line[2], 16);
-        const player = party.find(player => player.id === execId);
+    // console.log(data)
+    Object.values(REGISTRIES)
+        .forEach(registry => {
+            if (!registry.testLine(data.line[0]))
+                return;
 
-        if(!player)
-            return;
+            const execId = parseInt(data.line[2], 16);
+            const player = party.find(player => player.id === execId);
 
-        Object.values(REGISTRIES).forEach(registry =>
-            registry.getActions()
-                .filter(ac => ac.getID().exec(data.line[4]))
-                .forEach(ac => ac.setState(nameToId(player.name), ActionElementState.Active, data)))
-    }
-    else if(data.line[0] === "03")
+            if(!player)
+                return;
+
+            registry.getActions().forEach(ac => ac.test(player, data))
+        });
+
+    if(data.line[0] === "03")
     {
         let player = party.find(player => data.line[3] === player.name);
 
         if(!player)
         {
-            if(party.length <= 1)
+            if(party.length <= 1 && data.line[3] === self.name)
                 player = self;
 
             if(!player)
                 return;
         }
 
-        player = playerParser({...player,
-            id: data.line[2],
-            job: parseInt(data.line[4], 16),
-            level: parseInt(data.line[5], 16),
-        });
-
-        if(party.length <= 1)
-        {
-            self = player;
-            party = solo();
-        }
-        reset();
+        if(updatePlayer(playerParser({...player,
+                id: data.line[2],
+                job: parseInt(data.line[4], 16),
+                level: parseInt(data.line[5], 16),
+            })))
+            reset();
     }
     else if(data.line[0] === "33" && (data.line[3].substring(6) === "0F" ||  data.line[3].substring(6) === "03"))
         reset();

@@ -43,7 +43,7 @@ class ActionElement {
     /**
      * Sets the state of the element.
      * @param {ActionElementState} state - The state to set.
-     * @param {{any}|undefined} data - Optional data associated with the state.
+     * @param {LogLine|undefined} data - Optional data associated with the state.
      */
     setState(state, data = undefined) {
         this.getMainAction().setState(this.element, state, data);
@@ -199,7 +199,7 @@ export class Action {
      * Sets the state of the action element for the specified player.
      * @param {string|HTMLElement} element - The player name or Element Action.
      * @param {ActionElementState} state - The state to set.
-     * @param {{any}|undefined} data - Additional data for setting the state.
+     * @param {LogLine|undefined} data - Additional data for setting the state.
      * @abstract
      */
     setState(element, state, data = undefined)
@@ -215,5 +215,29 @@ export class Action {
     getState(player)
     {
         return this.getElement(player)?.getAction()?.getState();
+    }
+
+    /**
+     * test and execute action
+     * @param {Player} player - The player.
+     * @param {object} data - Data Line.
+     */
+    test(player, data)
+    {
+        if(!this.getID().exec(data.line[4]))
+            return;
+
+        this.execute(player, data);
+    }
+
+    /**
+     * Execute Action for specific player
+     * @param {Player} player - The player.
+     * @param {LogLine|undefined} data - Additional data for setting the state.
+     * @abstract
+     */
+    execute(player, data)
+    {
+        throw new Error("Method not implemented.");
     }
 }

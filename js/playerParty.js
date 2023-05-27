@@ -5,6 +5,7 @@
  * @property {string} name - Le nom du joueur.
  * @property {Job} job - L'objet représentant le job du joueur.
  * @property {number} level - Le niveau du joueur.
+ * @property {boolean} inparty - Le joueur dans l'alliance ou la party.
  */
 
 import {idToJob, Jobs, transformKeysToLowerCase} from "./utils.js";
@@ -13,7 +14,7 @@ import {reset} from "./script.js";
 /** @type {Player[]} */
 export let party = [];
 /** @type {Player} */
-export let self = { id: 0, name: "", job: Jobs.NONE, level: 0 };
+export let self = { id: 0, name: "", job: Jobs.NONE, level: 0, inparty: true };
 
 /**
  * Retourne un tableau contenant uniquement le personnage actuel.
@@ -23,6 +24,29 @@ export let self = { id: 0, name: "", job: Jobs.NONE, level: 0 };
 export const solo = () => {
     return [self];
 };
+
+
+/**
+ * Met à jour le joueur dans la party ou remplace la variable self.
+ *
+ * @param {Player} newPlayer - Le joueur mis à jour.
+ * @return {boolean} something update
+ */
+export function updatePlayer(newPlayer) {
+    const index = party.findIndex(player => player.name === newPlayer.name);
+
+    if (party.length === 1) {
+        self = newPlayer;
+        party = solo();
+        return true;
+    } else if (index !== -1) {
+        if (self.name === newPlayer.name)
+            self = newPlayer;
+        party.splice(index, 1, newPlayer);
+        return true;
+    }
+    return false;
+}
 
 
 
@@ -44,7 +68,14 @@ export function playerParser(data) {
     if(typeof data.job === "number")
         data.job = idToJob(data.job);
 
-    return data;
+    const joueurFiltre = {};
+    joueurFiltre.id = data.id || null;
+    joueurFiltre.name = data.name || '';
+    joueurFiltre.job = data.job || null;
+    joueurFiltre.level = data.level || 0;
+    joueurFiltre.inparty = data.inparty || false;
+
+    return joueurFiltre;
 }
 
 /**
@@ -65,12 +96,8 @@ addOverlayListener("ChangePrimaryPlayer", (data) => {
 
         if (!player) return;
 
-        self = playerParser(player);
-
-        if (party.length <= 1) {
-            party = solo();
-            reset();
-        }
+        updatePlayer(playerParser({...player, inparty: true}));
+        reset();
     });
 });
 

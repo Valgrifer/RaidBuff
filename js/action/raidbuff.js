@@ -1,4 +1,4 @@
-import {ActionJobLevel, Jobs} from "../utils.js";
+import {ActionJobLevel, Jobs, nameToId} from "../utils.js";
 import {Action, ActionElementState} from "./action.js";
 import {Before} from "../pseudoStyles.js";
 
@@ -12,15 +12,17 @@ export class RaidBuff extends Action {
      * @param {string} image - The image associated with the buff.
      * @param {number} cd - The cooldown duration of the buff in seconds.
      * @param {number} time - The active duration of the buff in seconds.
-     * @param {string|function({any}): string} desc - The description of the buff.
+     * @param {string|function(LogLine): string} desc - The description of the buff.
      * @param {ActionJobLevel} ajl - The action job level of the buff.
+     * @param {boolean} bossDeBuff - If buff is apply on boss.
      */
-    constructor(registry, name, id, image, cd, time, desc, ajl = new ActionJobLevel(Jobs.NONE, 0))
+    constructor(registry, name, id, image, cd, time, desc, ajl = new ActionJobLevel(Jobs.NONE, 0), bossDeBuff= false)
     {
         super(registry, new RegExp(`^${id}$`), name, image, ajl);
         this.cd = cd;
         this.time = time;
         this.desc = desc;
+        this.bossDeBuff = bossDeBuff;
 
         console.log("Register Buff: \"" + name + "\"\t\t with id (" + id + "),\t\t Cool-down: " + cd + "s ,\t\t Duration: " + time + "s,\t\t Desc:" + desc);
     }
@@ -76,7 +78,7 @@ export class RaidBuff extends Action {
 
     /**
      * Returns the description of the buff.
-     * @param {{any}} data - Additional data for generating the description.
+     * @param {LogLine} data - Additional data for generating the description.
      * @return {string} - The description of the buff.
      */
     getDescription(data)
@@ -85,10 +87,19 @@ export class RaidBuff extends Action {
     }
 
     /**
+     * If buff is apply on boss.
+     * @return {boolean} - If buff is apply on boss.
+     */
+    isBossDeBuff()
+    {
+        return this.bossDeBuff;
+    }
+
+    /**
      * Sets the state of the action element for the specified player.
      * @param {string|HTMLElement} element - The player name or Element Action.
      * @param {ActionElementState} state - The state to set.
-     * @param {{any}|undefined} data - Additional data for setting the state.
+     * @param {LogLine|undefined} data - Additional data for setting the state.
      */
     setState(element, state, data = undefined)
     {
@@ -116,5 +127,19 @@ export class RaidBuff extends Action {
                 element.style.order = null;
                 break;
         }
+    }
+
+
+    /**
+     * Execute Action for specific player
+     * @param {Player} player - The player.
+     * @param {LogLine|undefined} data - Additional data for setting the state.
+     */
+    execute(player, data)
+    {
+        if(!this.isBossDeBuff() && !player.inparty)
+            return;
+
+        this.setState(nameToId(player.name), ActionElementState.Active, data);
     }
 }

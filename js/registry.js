@@ -27,8 +27,9 @@ export class Registry {
      * Create a registry.
      * @param {string} name - The name of the registry.
      * @param {HTMLElement} container - The container element.
+     * @param {RegExp|boolean} lineFilter - Filter Line.
      */
-    constructor(name, container) {
+    constructor(name, container, lineFilter = /^21|22$/) {
         /**
          * The name of the registry.
          * @type {string}
@@ -42,6 +43,13 @@ export class Registry {
          * @private
          */
         this._container = container;
+
+        /**
+         * Filter Line.
+         * @type {RegExp|boolean}
+         * @private
+         */
+        this._lineFilter = lineFilter;
 
         /**
          * The array of registered actions.
@@ -74,6 +82,17 @@ export class Registry {
      */
     getContainer() {
         return this._container;
+    }
+
+    /**
+     * test Line to continue in this registry.
+     * @param {string} idLine Line.
+     * @returns {boolean} result.
+     */
+    testLine(idLine) {
+        return typeof this._lineFilter === "boolean" ? this._lineFilter :
+            typeof this._lineFilter === "object" && this._lineFilter instanceof RegExp ? this._lineFilter.exec(idLine) :
+                false;
     }
 
     /**
