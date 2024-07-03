@@ -39,120 +39,121 @@ export function run() {
         new RaidBuff(RaidBuffRegistry, "PeculiarLight", "2C9D", "https://xivapi.com/i/003000/003289_hr1.png", 60, 15, "5% Mag");
     }
 
-
-    const SelfDEFRegistry = new Registry('SelfDefensive', document.querySelector(".container#selfDEF"));
-    const SelfDMGRegistry = new Registry('SelfDamage', document.querySelector(".container#selfDMG"));
-    // Tank
-    {
+    if (ModalOn) {
+        const SelfDEFRegistry = new Registry('SelfDefensive', document.querySelector(".container#selfDEF"));
+        const SelfDMGRegistry = new Registry('SelfDamage', document.querySelector(".container#selfDMG"));
+        // Tank
         {
-            new SelfCoolDown(SelfDEFRegistry, "Rampart", "1D6B", "https://xivapi.com/i/000000/000801_hr1.png", 90, 20, ActionJobLevel(JobCategory.Tank, 8));
-            new SelfCoolDown(SelfDEFRegistry, "Reprisal", "1D6F", "https://xivapi.com/i/000000/000806_hr1.png", 60, 0, ActionJobLevel(JobCategory.Tank, 22));
-            new SelfCoolDown(SelfDEFRegistry, "ArmsLength", "1D7C", "https://xivapi.com/i/000000/000822_hr1.png", 120, 6, ActionJobLevel([JobCategory.Tank, JobCategory.Melee, JobCategory.Range], 32));
-            new SelfCoolDown(SelfDEFRegistry, "Shirk", "1D71", "https://xivapi.com/i/000000/000810_hr1.png", 120, 0, ActionJobLevel(JobCategory.Tank, 48));
+            {
+                new SelfCoolDown(SelfDEFRegistry, "Rampart", "1D6B", "https://xivapi.com/i/000000/000801_hr1.png", 90, 20, ActionJobLevel(JobCategory.Tank, 8));
+                new SelfCoolDown(SelfDEFRegistry, "Reprisal", "1D6F", "https://xivapi.com/i/000000/000806_hr1.png", 60, 0, ActionJobLevel(JobCategory.Tank, 22));
+                new SelfCoolDown(SelfDEFRegistry, "ArmsLength", "1D7C", "https://xivapi.com/i/000000/000822_hr1.png", 120, 6, ActionJobLevel([JobCategory.Tank, JobCategory.Melee, JobCategory.Range], 32));
+                new SelfCoolDown(SelfDEFRegistry, "Shirk", "1D71", "https://xivapi.com/i/000000/000810_hr1.png", 120, 0, ActionJobLevel(JobCategory.Tank, 48));
+            }
+
+            // PLD
+            {
+                new SelfCoolDown(SelfDMGRegistry, "FightOrFlight", "14", "https://xivapi.com/i/000000/000166_hr1.png", 60, 20, ActionJobLevel(Jobs.PLD, 2));
+                new SelfCoolDown(SelfDEFRegistry, "Sentinel", "11", "https://xivapi.com/i/000000/000151_hr1.png", 120, 15, ActionJobLevel(Jobs.PLD, 38));
+                new SelfCoolDown(SelfDEFRegistry, "HallowedGround", "1E", "https://xivapi.com/i/002000/002502_hr1.png", 420, 10, ActionJobLevel(Jobs.PLD, 50));
+                new SelfCoolDown(SelfDEFRegistry, "Bulwark", "16", "https://xivapi.com/i/000000/000167_hr1.png", 90, 10, ActionJobLevel(Jobs.PLD, 52));
+                new SelfCoolDown(SelfDEFRegistry, "DivineVeil", "DD4", "https://xivapi.com/i/002000/002508_hr1.png", 90, 0, ActionJobLevel(Jobs.PLD, 56));
+                new SelfCoolDown(SelfDMGRegistry, "GoringBlade", "DD2", "https://xivapi.com/i/002000/002506_hr1.png", 60, 0, ActionJobLevel(Jobs.PLD, 54));
+                new SelfCoolDown(SelfDMGRegistry, "Requiescat", "1CD7", "https://xivapi.com/i/002000/002513_hr1.png", 60, 0, ActionJobLevel(Jobs.PLD, 68));
+                new SelfCoolDown(SelfDEFRegistry, "PassageOfArms", "1CD9", "https://xivapi.com/i/002000/002515_hr1.png", 120, 0, ActionJobLevel(Jobs.PLD, 70));
+            }
+
+            // WAR
+            {
+                new SelfCoolDown(SelfDMGRegistry, "InnerRelease", "26|1CDD", "https://xivapi.com/i/002000/002564_hr1.png", 60, 0, ActionJobLevel(Jobs.WAR, 6));
+                new SelfCoolDown(SelfDEFRegistry, "ThrillOfBattle", "28", "https://xivapi.com/i/000000/000263_hr1.png", 90, 10, ActionJobLevel(Jobs.WAR, 30));
+                new SelfCoolDown(SelfDEFRegistry, "Vengeance", "2C", "https://xivapi.com/i/000000/000267_hr1.png", 120, 10, ActionJobLevel(Jobs.WAR, 38));
+                new SelfCoolDown(SelfDEFRegistry, "Holmgang", "2B", "https://xivapi.com/i/000000/000266_hr1.png", 240, 0, ActionJobLevel(Jobs.WAR, 42));
+                new SelfCoolDown(SelfDEFRegistry, "ShakeItOff", "1CDC", "https://xivapi.com/i/002000/002563_hr1.png", 90, 0, ActionJobLevel(Jobs.WAR, 68));
+                new SelfCoolDown(SelfDEFRegistry, "Equilibrium", "DE0", "https://xivapi.com/i/002000/002560_hr1.png", 60, 15, ActionJobLevel(Jobs.WAR, 58));
+            }
+
+            // DRK
+            {
+                new SelfCoolDown(SelfDMGRegistry, "BloodWeapon", "E29", "https://xivapi.com/i/003000/003071_hr1.png", 60, 15, ActionJobLevel(Jobs.DRK, 35));
+                new SelfCoolDown(SelfDMGRegistry, "CarveAndSpit", "E3B", "https://xivapi.com/i/003000/003058_hr1.png", 60, 0, ActionJobLevel(Jobs.DRK, 60));
+                new SelfCoolDown(SelfDMGRegistry, "SaltedEarth", "E37", "https://xivapi.com/i/003000/003066_hr1.png", 90, 15, ActionJobLevel(Jobs.DRK, 52));
+                new SelfCoolDown(SelfDMGRegistry, "LivingShadow", "4058", "https://xivapi.com/i/003000/003088_hr1.png", 120, 0, ActionJobLevel(Jobs.DRK, 80));
+                new SelfCoolDown(SelfDMGRegistry, "Delirium", "1CDE", "https://xivapi.com/i/003000/003078_hr1.png", 60, 0, ActionJobLevel(Jobs.DRK, 68));
+                new SelfCoolDown(SelfDEFRegistry, "LivingDead", "E36", "https://xivapi.com/i/003000/003077_hr1.png", 300, 300, ActionJobLevel(Jobs.DRK, 50));
+                new SelfCoolDown(SelfDEFRegistry, "DarkMissionary", "4057", "https://xivapi.com/i/003000/003087_hr1.png", 90, 90, ActionJobLevel(Jobs.DRK, 76));
+                new SelfCoolDown(SelfDEFRegistry, "DarkMind", "E32", "https://xivapi.com/i/003000/003076_hr1.png", 60, 60, ActionJobLevel(Jobs.DRK, 45));
+                new SelfCoolDown(SelfDEFRegistry, "ShadowWall", "E34", "https://xivapi.com/i/003000/003075_hr1.png", 120, 120, ActionJobLevel(Jobs.DRK, 38));
+            }
+
+            // GNB
+            {
+                new SelfCoolDown(SelfDMGRegistry, "NoMercy", "3F0A", "https://xivapi.com/i/003000/003402_hr1.png", 60, 20, ActionJobLevel(Jobs.GNB, 2));
+                new SelfCoolDown(SelfDMGRegistry, "Bloodfest", "3F24", "https://xivapi.com/i/003000/003428_hr1.png", 120, 0, ActionJobLevel(Jobs.GNB, 76));
+                new SelfCoolDown(SelfDEFRegistry, "Superbolide", "3F18", "https://xivapi.com/i/003000/003416_hr1.png", 360, 10, ActionJobLevel(Jobs.GNB, 50));
+                new SelfCoolDown(SelfDEFRegistry, "HeartOfLight", "3F20", "https://xivapi.com/i/003000/003424_hr1.png", 90, 15, ActionJobLevel(Jobs.GNB, 64));
+                new SelfCoolDown(SelfDEFRegistry, "Nebula", "3F14", "https://xivapi.com/i/003000/003412_hr1.png", 120, 15, ActionJobLevel(Jobs.GNB, 38));
+                new SelfCoolDown(SelfDEFRegistry, "Camouflage", "3F0C", "https://xivapi.com/i/003000/003404_hr1.png", 90, 20, ActionJobLevel(Jobs.GNB, 6));
+            }
         }
 
-        // PLD
+        //Heal
         {
-            new SelfCoolDown(SelfDMGRegistry, "FightOrFlight", "14", "https://xivapi.com/i/000000/000166_hr1.png", 60, 20, ActionJobLevel(Jobs.PLD, 2));
-            new SelfCoolDown(SelfDEFRegistry, "Sentinel", "11", "https://xivapi.com/i/000000/000151_hr1.png", 120, 15, ActionJobLevel(Jobs.PLD, 38));
-            new SelfCoolDown(SelfDEFRegistry, "HallowedGround", "1E", "https://xivapi.com/i/002000/002502_hr1.png", 420, 10, ActionJobLevel(Jobs.PLD, 50));
-            new SelfCoolDown(SelfDEFRegistry, "Bulwark", "16", "https://xivapi.com/i/000000/000167_hr1.png", 90, 10, ActionJobLevel(Jobs.PLD, 52));
-            new SelfCoolDown(SelfDEFRegistry, "DivineVeil", "DD4", "https://xivapi.com/i/002000/002508_hr1.png", 90, 0, ActionJobLevel(Jobs.PLD, 56));
-            new SelfCoolDown(SelfDMGRegistry, "GoringBlade", "DD2", "https://xivapi.com/i/002000/002506_hr1.png", 60, 0, ActionJobLevel(Jobs.PLD, 54));
-            new SelfCoolDown(SelfDMGRegistry, "Requiescat", "1CD7", "https://xivapi.com/i/002000/002513_hr1.png", 60, 0, ActionJobLevel(Jobs.PLD, 68));
-            new SelfCoolDown(SelfDEFRegistry, "PassageOfArms", "1CD9", "https://xivapi.com/i/002000/002515_hr1.png", 120, 0, ActionJobLevel(Jobs.PLD, 70));
-        }
+            {
+                new SelfCoolDown(SelfDEFRegistry, "LucidDreaming", "1D8A", "https://xivapi.com/i/000000/000865_hr1.png", 60, 21, ActionJobLevel(JobCategory.Heal, 14));
+                new SelfCoolDown(SelfDEFRegistry, "Swiftcast", "1D89", "https://xivapi.com/i/000000/000866_hr1.png", 60, 0, ActionJobLevel(JobCategory.Heal, 18));
+                new SelfCoolDown(SelfDEFRegistry, "Surecast", "1D87", "https://xivapi.com/i/000000/000869_hr1.png", 120, 6, ActionJobLevel(JobCategory.Heal, 44));
+            }
 
-        // WAR
-        {
-            new SelfCoolDown(SelfDMGRegistry, "InnerRelease", "26|1CDD", "https://xivapi.com/i/002000/002564_hr1.png", 60, 0, ActionJobLevel(Jobs.WAR, 6));
-            new SelfCoolDown(SelfDEFRegistry, "ThrillOfBattle", "28", "https://xivapi.com/i/000000/000263_hr1.png", 90, 10, ActionJobLevel(Jobs.WAR, 30));
-            new SelfCoolDown(SelfDEFRegistry, "Vengeance", "2C", "https://xivapi.com/i/000000/000267_hr1.png", 120, 10, ActionJobLevel(Jobs.WAR, 38));
-            new SelfCoolDown(SelfDEFRegistry, "Holmgang", "2B", "https://xivapi.com/i/000000/000266_hr1.png", 240, 0, ActionJobLevel(Jobs.WAR, 42));
-            new SelfCoolDown(SelfDEFRegistry, "ShakeItOff", "1CDC", "https://xivapi.com/i/002000/002563_hr1.png", 90, 0, ActionJobLevel(Jobs.WAR, 68));
-            new SelfCoolDown(SelfDEFRegistry, "Equilibrium", "DE0", "https://xivapi.com/i/002000/002560_hr1.png", 60, 15, ActionJobLevel(Jobs.WAR, 58));
-        }
+            // WHM
+            {
+                new SelfCoolDown(SelfDMGRegistry, "PresenceOfMind", "88", "https://xivapi.com/i/002000/002626_hr1.png", 120, 15, ActionJobLevel(Jobs.WHM, 30));
+                new SelfCoolDown(SelfDEFRegistry, "Benediction", "8C", "https://xivapi.com/i/002000/002627_hr1.png", 180, 0, ActionJobLevel(Jobs.WHM, 50));
+                new SelfCoolDown(SelfDEFRegistry, "Asylum", "DF1", "https://xivapi.com/i/002000/002632_hr1.png", 90, 24, ActionJobLevel(Jobs.WHM, 52));
+                new SelfCoolDown(SelfDEFRegistry, "Tetragrammaton", "DF2", "https://xivapi.com/i/002000/002633_hr1.png", 60, 0, ActionJobLevel(Jobs.WHM, 60));
+                new SelfCoolDown(SelfDEFRegistry, "PlenaryIndulgence", "1D09", "https://xivapi.com/i/002000/002639_hr1.png", 60, 10, ActionJobLevel(Jobs.WHM, 70));
+                new SelfCoolDown(SelfDEFRegistry, "Temperance", "4098", "https://xivapi.com/i/002000/002645_hr1.png", 120, 20, ActionJobLevel(Jobs.WHM, 80));
+                new SelfCoolDown(SelfDEFRegistry, "Aquaveil", "6505", "https://xivapi.com/i/002000/002648_hr1.png", 60, 8, ActionJobLevel(Jobs.WHM, 86));
+                new SelfCoolDown(SelfDEFRegistry, "LiturgyOfTheBell", "6506", "https://xivapi.com/i/002000/002649_hr1.png", 180, 0, ActionJobLevel(Jobs.WHM, 90));
+            }
 
-        // DRK
-        {
-            new SelfCoolDown(SelfDMGRegistry, "BloodWeapon", "E29", "https://xivapi.com/i/003000/003071_hr1.png", 60, 15, ActionJobLevel(Jobs.DRK, 35));
-            new SelfCoolDown(SelfDMGRegistry, "CarveAndSpit", "E3B", "https://xivapi.com/i/003000/003058_hr1.png", 60, 0, ActionJobLevel(Jobs.DRK, 60));
-            new SelfCoolDown(SelfDMGRegistry, "SaltedEarth", "E37", "https://xivapi.com/i/003000/003066_hr1.png", 90, 15, ActionJobLevel(Jobs.DRK, 52));
-            new SelfCoolDown(SelfDMGRegistry, "LivingShadow", "4058", "https://xivapi.com/i/003000/003088_hr1.png", 120, 0, ActionJobLevel(Jobs.DRK, 80));
-            new SelfCoolDown(SelfDMGRegistry, "Delirium", "1CDE", "https://xivapi.com/i/003000/003078_hr1.png", 60, 0, ActionJobLevel(Jobs.DRK, 68));
-            new SelfCoolDown(SelfDEFRegistry, "LivingDead", "E36", "https://xivapi.com/i/003000/003077_hr1.png", 300, 300, ActionJobLevel(Jobs.DRK, 50));
-            new SelfCoolDown(SelfDEFRegistry, "DarkMissionary", "4057", "https://xivapi.com/i/003000/003087_hr1.png", 90, 90, ActionJobLevel(Jobs.DRK, 76));
-            new SelfCoolDown(SelfDEFRegistry, "DarkMind", "E32", "https://xivapi.com/i/003000/003076_hr1.png", 60, 60, ActionJobLevel(Jobs.DRK, 45));
-            new SelfCoolDown(SelfDEFRegistry, "ShadowWall", "E34", "https://xivapi.com/i/003000/003075_hr1.png", 120, 120, ActionJobLevel(Jobs.DRK, 38));
-        }
+            // SCH
+            {
+                new SelfCoolDown(SelfDMGRegistry, "Aetherflow", "A6", "https://xivapi.com/i/000000/000510_hr1.png", 60, 0, ActionJobLevel(Jobs.SCH, 45));
+                new SelfCoolDown(SelfDEFRegistry, "WhisperingDawn", "4099", "https://xivapi.com/i/002000/002852_hr1.png", 60, 21, ActionJobLevel(Jobs.SCH, 20));
+                new SelfCoolDown(SelfDEFRegistry, "FeyIllumination", "409A", "https://xivapi.com/i/002000/002853_hr1.png", 120, 20, ActionJobLevel(Jobs.SCH, 40));
+                new SelfCoolDown(SelfDEFRegistry, "DeploymentTactics", "E01", "https://xivapi.com/i/002000/002808_hr1.png", 120, 0, ActionJobLevel(Jobs.SCH, 56));
+                new SelfCoolDown(SelfDEFRegistry, "Recitation", "409E", "https://xivapi.com/i/002000/002822_hr1.png", 90, 0, ActionJobLevel(Jobs.SCH, 74));
+                new SelfCoolDown(SelfDEFRegistry, "FeyBlessing", "409F", "https://xivapi.com/i/002000/002854_hr1.png", 60, 0, ActionJobLevel(Jobs.SCH, 76));
+                new SelfCoolDown(SelfDEFRegistry, "SummonSeraph", "40A1", "https://xivapi.com/i/002000/002850_hr1.png", 120, 22, ActionJobLevel(Jobs.SCH, 80));
+                new SelfCoolDown(SelfDEFRegistry, "Protraction", "650B", "https://xivapi.com/i/002000/002877_hr1.png", 60, 10, ActionJobLevel(Jobs.SCH, 86));
+                new SelfCoolDown(SelfDEFRegistry, "Expedient", "650C", "https://xivapi.com/i/002000/002878_hr1.png", 120, 20, ActionJobLevel(Jobs.SCH, 90));
+            }
 
-        // GNB
-        {
-            new SelfCoolDown(SelfDMGRegistry, "NoMercy", "3F0A", "https://xivapi.com/i/003000/003402_hr1.png", 60, 20, ActionJobLevel(Jobs.GNB, 2));
-            new SelfCoolDown(SelfDMGRegistry, "Bloodfest", "3F24", "https://xivapi.com/i/003000/003428_hr1.png", 120, 0, ActionJobLevel(Jobs.GNB, 76));
-            new SelfCoolDown(SelfDEFRegistry, "Superbolide", "3F18", "https://xivapi.com/i/003000/003416_hr1.png", 360, 10, ActionJobLevel(Jobs.GNB, 50));
-            new SelfCoolDown(SelfDEFRegistry, "HeartOfLight", "3F20", "https://xivapi.com/i/003000/003424_hr1.png", 90, 15, ActionJobLevel(Jobs.GNB, 64));
-            new SelfCoolDown(SelfDEFRegistry, "Nebula", "3F14", "https://xivapi.com/i/003000/003412_hr1.png", 120, 15, ActionJobLevel(Jobs.GNB, 38));
-            new SelfCoolDown(SelfDEFRegistry, "Camouflage", "3F0C", "https://xivapi.com/i/003000/003404_hr1.png", 90, 20, ActionJobLevel(Jobs.GNB, 6));
-        }
-    }
+            // AST
+            {
+                new SelfCoolDown(SelfDMGRegistry, "Lightspeed", "E16", "https://xivapi.com/i/003000/003135_hr1.png", 120, 15, ActionJobLevel(Jobs.AST, 6));
+                new SelfCoolDown(SelfDMGRegistry, "MinorArcana", "1D13", "https://xivapi.com/i/003000/003106_hr1.png", 60, 0, ActionJobLevel(Jobs.AST, 70));
+                new SelfCoolDown(SelfDEFRegistry, "CollectiveUnconscious", "E1D", "https://xivapi.com/i/003000/003140_hr1.png", 60, 0, ActionJobLevel(Jobs.AST, 58));
+                new SelfCoolDown(SelfDEFRegistry, "CelestialOpposition", "40A9", "https://xivapi.com/i/003000/003142_hr1.png", 60, 0, ActionJobLevel(Jobs.AST, 60));
+                new SelfCoolDown(SelfDEFRegistry, "EarthlyStar", "1D0F", "https://xivapi.com/i/003000/003143_hr1.png", 60, 0, ActionJobLevel(Jobs.AST, 62));
+                new SelfCoolDown(SelfDEFRegistry, "Horoscope", "40AD", "https://xivapi.com/i/003000/003550_hr1.png", 60, 0, ActionJobLevel(Jobs.AST, 76));
+                new SelfCoolDown(SelfDEFRegistry, "NeutralSect", "40AF", "https://xivapi.com/i/003000/003552_hr1.png", 120, 20, ActionJobLevel(Jobs.AST, 80));
+                new SelfCoolDown(SelfDEFRegistry, "Exaltation", "6511", "https://xivapi.com/i/003000/003561_hr1.png", 60, 8, ActionJobLevel(Jobs.AST, 86));
+                new SelfCoolDown(SelfDEFRegistry, "Macrocosmos", "6512", "https://xivapi.com/i/003000/003562_hr1.png", 180, 0, ActionJobLevel(Jobs.AST, 90));
+            }
 
-    //Heal
-    {
-        {
-            new SelfCoolDown(SelfDEFRegistry, "LucidDreaming", "1D8A", "https://xivapi.com/i/000000/000865_hr1.png", 60, 21, ActionJobLevel(JobCategory.Heal, 14));
-            new SelfCoolDown(SelfDEFRegistry, "Swiftcast", "1D89", "https://xivapi.com/i/000000/000866_hr1.png", 60, 0, ActionJobLevel(JobCategory.Heal, 18));
-            new SelfCoolDown(SelfDEFRegistry, "Surecast", "1D87", "https://xivapi.com/i/000000/000869_hr1.png", 120, 6, ActionJobLevel(JobCategory.Heal, 44));
-        }
-
-        // WHM
-        {
-            new SelfCoolDown(SelfDMGRegistry, "PresenceOfMind", "88", "https://xivapi.com/i/002000/002626_hr1.png", 120, 15, ActionJobLevel(Jobs.WHM, 30));
-            new SelfCoolDown(SelfDEFRegistry, "Benediction", "8C", "https://xivapi.com/i/002000/002627_hr1.png", 180, 0, ActionJobLevel(Jobs.WHM, 50));
-            new SelfCoolDown(SelfDEFRegistry, "Asylum", "DF1", "https://xivapi.com/i/002000/002632_hr1.png", 90, 24, ActionJobLevel(Jobs.WHM, 52));
-            new SelfCoolDown(SelfDEFRegistry, "Tetragrammaton", "DF2", "https://xivapi.com/i/002000/002633_hr1.png", 60, 0, ActionJobLevel(Jobs.WHM, 60));
-            new SelfCoolDown(SelfDEFRegistry, "PlenaryIndulgence", "1D09", "https://xivapi.com/i/002000/002639_hr1.png", 60, 10, ActionJobLevel(Jobs.WHM, 70));
-            new SelfCoolDown(SelfDEFRegistry, "Temperance", "4098", "https://xivapi.com/i/002000/002645_hr1.png", 120, 20, ActionJobLevel(Jobs.WHM, 80));
-            new SelfCoolDown(SelfDEFRegistry, "Aquaveil", "6505", "https://xivapi.com/i/002000/002648_hr1.png", 60, 8, ActionJobLevel(Jobs.WHM, 86));
-            new SelfCoolDown(SelfDEFRegistry, "LiturgyOfTheBell", "6506", "https://xivapi.com/i/002000/002649_hr1.png", 180, 0, ActionJobLevel(Jobs.WHM, 90));
-        }
-
-        // SCH
-        {
-            new SelfCoolDown(SelfDMGRegistry, "Aetherflow", "A6", "https://xivapi.com/i/000000/000510_hr1.png", 60, 0, ActionJobLevel(Jobs.SCH, 45));
-            new SelfCoolDown(SelfDEFRegistry, "WhisperingDawn", "4099", "https://xivapi.com/i/002000/002852_hr1.png", 60, 21, ActionJobLevel(Jobs.SCH, 20));
-            new SelfCoolDown(SelfDEFRegistry, "FeyIllumination", "409A", "https://xivapi.com/i/002000/002853_hr1.png", 120, 20, ActionJobLevel(Jobs.SCH, 40));
-            new SelfCoolDown(SelfDEFRegistry, "DeploymentTactics", "E01", "https://xivapi.com/i/002000/002808_hr1.png", 120, 0, ActionJobLevel(Jobs.SCH, 56));
-            new SelfCoolDown(SelfDEFRegistry, "Recitation", "409E", "https://xivapi.com/i/002000/002822_hr1.png", 90, 0, ActionJobLevel(Jobs.SCH, 74));
-            new SelfCoolDown(SelfDEFRegistry, "FeyBlessing", "409F", "https://xivapi.com/i/002000/002854_hr1.png", 60, 0, ActionJobLevel(Jobs.SCH, 76));
-            new SelfCoolDown(SelfDEFRegistry, "SummonSeraph", "40A1", "https://xivapi.com/i/002000/002850_hr1.png", 120, 22, ActionJobLevel(Jobs.SCH, 80));
-            new SelfCoolDown(SelfDEFRegistry, "Protraction", "650B", "https://xivapi.com/i/002000/002877_hr1.png", 60, 10, ActionJobLevel(Jobs.SCH, 86));
-            new SelfCoolDown(SelfDEFRegistry, "Expedient", "650C", "https://xivapi.com/i/002000/002878_hr1.png", 120, 20, ActionJobLevel(Jobs.SCH, 90));
-        }
-
-        // AST
-        {
-            new SelfCoolDown(SelfDMGRegistry, "Lightspeed", "E16", "https://xivapi.com/i/003000/003135_hr1.png", 120, 15, ActionJobLevel(Jobs.AST, 6));
-            new SelfCoolDown(SelfDMGRegistry, "MinorArcana", "1D13", "https://xivapi.com/i/003000/003106_hr1.png", 60, 0, ActionJobLevel(Jobs.AST, 70));
-            new SelfCoolDown(SelfDEFRegistry, "CollectiveUnconscious", "E1D", "https://xivapi.com/i/003000/003140_hr1.png", 60, 0, ActionJobLevel(Jobs.AST, 58));
-            new SelfCoolDown(SelfDEFRegistry, "CelestialOpposition", "40A9", "https://xivapi.com/i/003000/003142_hr1.png", 60, 0, ActionJobLevel(Jobs.AST, 60));
-            new SelfCoolDown(SelfDEFRegistry, "EarthlyStar", "1D0F", "https://xivapi.com/i/003000/003143_hr1.png", 60, 0, ActionJobLevel(Jobs.AST, 62));
-            new SelfCoolDown(SelfDEFRegistry, "Horoscope", "40AD", "https://xivapi.com/i/003000/003550_hr1.png", 60, 0, ActionJobLevel(Jobs.AST, 76));
-            new SelfCoolDown(SelfDEFRegistry, "NeutralSect", "40AF", "https://xivapi.com/i/003000/003552_hr1.png", 120, 20, ActionJobLevel(Jobs.AST, 80));
-            new SelfCoolDown(SelfDEFRegistry, "Exaltation", "6511", "https://xivapi.com/i/003000/003561_hr1.png", 60, 8, ActionJobLevel(Jobs.AST, 86));
-            new SelfCoolDown(SelfDEFRegistry, "Macrocosmos", "6512", "https://xivapi.com/i/003000/003562_hr1.png", 180, 0, ActionJobLevel(Jobs.AST, 90));
-        }
-
-        // SGE
-        {
-            new SelfCoolDown(SelfDEFRegistry, "PhysisII", "5EE[0E]", "https://xivapi.com/i/003000/003670_hr1.png", 60, 15, ActionJobLevel(Jobs.SGE, 20));
-            new SelfCoolDown(SelfDEFRegistry, "Soteria", "5EE6", "https://xivapi.com/i/003000/003662_hr1.png", 90, 0, ActionJobLevel(Jobs.SGE, 35));
-            new SelfCoolDown(SelfDEFRegistry, "Zoe", "5EEC", "https://xivapi.com/i/003000/003668_hr1.png", 120, 0, ActionJobLevel(Jobs.SGE, 56));
-            new SelfCoolDown(SelfDEFRegistry, "Haima", "5EF1", "https://xivapi.com/i/003000/003673_hr1.png", 120, 0, ActionJobLevel(Jobs.SGE, 70));
-            new SelfCoolDown(SelfDEFRegistry, "Rhizomata", "5EF5", "https://xivapi.com/i/003000/003677_hr1.png", 90, 0, ActionJobLevel(Jobs.SGE, 74));
-            new SelfCoolDown(SelfDEFRegistry, "Holos", "5EF6", "https://xivapi.com/i/003000/003678_hr1.png", 120, 20, ActionJobLevel(Jobs.SGE, 76));
-            new SelfCoolDown(SelfDEFRegistry, "Panhaima", "5EF7", "https://xivapi.com/i/003000/003679_hr1.png", 120, 0, ActionJobLevel(Jobs.SGE, 80));
-            new SelfCoolDown(SelfDEFRegistry, "Pneuma", "5EFE", "https://xivapi.com/i/003000/003686_hr1.png", 120, 0, ActionJobLevel(Jobs.SGE, 90));
+            // SGE
+            {
+                new SelfCoolDown(SelfDEFRegistry, "PhysisII", "5EE[0E]", "https://xivapi.com/i/003000/003670_hr1.png", 60, 15, ActionJobLevel(Jobs.SGE, 20));
+                new SelfCoolDown(SelfDEFRegistry, "Soteria", "5EE6", "https://xivapi.com/i/003000/003662_hr1.png", 90, 0, ActionJobLevel(Jobs.SGE, 35));
+                new SelfCoolDown(SelfDEFRegistry, "Zoe", "5EEC", "https://xivapi.com/i/003000/003668_hr1.png", 120, 0, ActionJobLevel(Jobs.SGE, 56));
+                new SelfCoolDown(SelfDEFRegistry, "Haima", "5EF1", "https://xivapi.com/i/003000/003673_hr1.png", 120, 0, ActionJobLevel(Jobs.SGE, 70));
+                new SelfCoolDown(SelfDEFRegistry, "Rhizomata", "5EF5", "https://xivapi.com/i/003000/003677_hr1.png", 90, 0, ActionJobLevel(Jobs.SGE, 74));
+                new SelfCoolDown(SelfDEFRegistry, "Holos", "5EF6", "https://xivapi.com/i/003000/003678_hr1.png", 120, 20, ActionJobLevel(Jobs.SGE, 76));
+                new SelfCoolDown(SelfDEFRegistry, "Panhaima", "5EF7", "https://xivapi.com/i/003000/003679_hr1.png", 120, 0, ActionJobLevel(Jobs.SGE, 80));
+                new SelfCoolDown(SelfDEFRegistry, "Pneuma", "5EFE", "https://xivapi.com/i/003000/003686_hr1.png", 120, 0, ActionJobLevel(Jobs.SGE, 90));
+            }
         }
     }
     reset();
