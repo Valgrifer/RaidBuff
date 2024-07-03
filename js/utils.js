@@ -10,7 +10,7 @@ export function nameToId(name) {
 /**
  * Represents an Action Job Level.
  * @class
- * @param {Job} job - The ID of the job level.
+ * @param {Job|JobCategory} job - The ID of the job level.
  * @param {number} lvl - The level of the job.
  */
 export function ActionJobLevel(job, lvl) {
@@ -20,7 +20,24 @@ export function ActionJobLevel(job, lvl) {
 
     this.job = job;
     this.lvl = lvl;
+
+    if(Array.isArray(this.job))
+        this.job = this.job.map(value => new ActionJobLevel(value, lvl));
 }
+
+/**
+ * @param {Player} player
+ * @return boolean
+ */
+ActionJobLevel.prototype.test = function (player) {
+    if(typeof this.job === "string")
+        return this.job === player.job?.category && this.lvl <= player.level;
+    else if(Array.isArray(this.job))
+        return this.job.filter(ajl => ajl.test(player)).length > 0;
+    else if(this.job instanceof Job)
+        return this.job.id === player.job?.id && this.lvl <= player.level;
+    return false;
+};
 
 /**
  * Represents the category of a job.
@@ -47,7 +64,7 @@ export const JobCategory = Object.freeze({
  * @class
  * @readonly
  */
-class Job {
+export class Job {
     /**
      * Create a job with the specified ID, name, abbreviation, and category.
      * @param {number} id - The job ID.
@@ -141,6 +158,7 @@ export const Jobs = Object.freeze({
     NIN: new Job(30, "Ninja", "NIN", JobCategory.Melee),
     SAM: new Job(34, "Samurai", "SAM", JobCategory.Melee),
     RPR: new Job(39, "Reaper", "RPR", JobCategory.Melee),
+    VPR: new Job(41, "Viper", "VPR", JobCategory.Melee),
 
     BRD: new Job(23, "Bard", "BRD", JobCategory.Range),
     MCH: new Job(31, "Machinist", "MCH", JobCategory.Range),
@@ -149,6 +167,7 @@ export const Jobs = Object.freeze({
     BLM: new Job(25, "Black Mage", "BLM", JobCategory.Magic),
     SMN: new Job(27, "Summoner", "SMN", JobCategory.Magic),
     RDM: new Job(35, "Red Mage", "RDM", JobCategory.Magic),
+    PCT: new Job(42, "Pictomancer", "PCT", JobCategory.Magic),
     BLU: new Job(36, "Blue Mage", "BLU", JobCategory.Magic),
 });
 

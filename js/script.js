@@ -1,4 +1,3 @@
-import {styleReset} from "./pseudoStyles.js";
 import {ActionElementState} from "./action/action.js";
 import {REGISTRIES} from "./registry.js";
 import {nameToId} from "./utils.js";
@@ -23,12 +22,10 @@ const UPDATE = () => {
 
         Object.values(REGISTRIES).forEach(registry => registry.getActions().forEach(ac => ac.reset()));
 
-        styleReset();
-
         party.forEach(player =>
             Object.values(REGISTRIES).forEach(registry =>
                 registry.getActions()
-                    .filter(ac => ac.getActionJobLevel().job.id === player.job?.id && ac.getActionJobLevel().lvl <= player.level)
+                    .filter(ac => ac.test(player, true))
                     .forEach(ac => ac.setState(nameToId(player.name), ActionElementState.Up))))
         return;
     }
@@ -98,7 +95,7 @@ addOverlayListener('LogLine', (data) => {
             if(!player)
                 return;
 
-            registry.getActions().forEach(ac => ac.test(player, data))
+            registry.getActions().forEach(ac => ac.testExecute(player, data))
         });
 
     if(data.line[0] === "03")
@@ -132,8 +129,6 @@ addOverlayListener('LogLine', (data) => {
  * @event ChangeZone
  */
 addOverlayListener("ChangeZone", reset);
-
-(await import('./setup.js')).run();
 
 startOverlayEvents();
 

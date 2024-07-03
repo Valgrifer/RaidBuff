@@ -1,10 +1,8 @@
 import {ActionJobLevel, Jobs, nameToId} from "../utils.js";
 import {Action, ActionElementState} from "./action.js";
-import Property, {getDefault} from "../property.js";
 import {self} from "../playerParty.js";
 
-// noinspection JSCheckFunctionSignatures
-export class RaidBuff extends Action {
+export class SelfCoolDown extends Action {
     /**
      * Creates an instance of the RaidBuff class.
      * @param {Registry} registry - The registry instance.
@@ -13,19 +11,13 @@ export class RaidBuff extends Action {
      * @param {string} image - The image associated with the buff.
      * @param {number} cd - The cooldown duration of the buff in seconds.
      * @param {number} time - The active duration of the buff in seconds.
-     * @param {string|function(LogLine): string} desc - The description of the buff.
      * @param {ActionJobLevel} ajl - The action job level of the buff.
-     * @param {boolean} bossDeBuff - If buff is apply on boss.
      */
-    constructor(registry, name, id, image, cd, time, desc, ajl = new ActionJobLevel(Jobs.NONE, 0), bossDeBuff= false)
+    constructor(registry, name, id, image, cd, time, ajl = new ActionJobLevel(Jobs.NONE, 0))
     {
         super(registry, new RegExp(`^${id}$`), name, image, ajl);
         this.cd = cd;
         this.time = time;
-        this.desc = desc;
-        this.bossDeBuff = bossDeBuff;
-
-        // console.log("Register Buff: \"" + name + "\"\t\t with id (" + id + "),\t\t Cool-down: " + cd + "s ,\t\t Duration: " + time + "s,\t\t Desc:" + desc);
     }
 
 
@@ -78,25 +70,6 @@ export class RaidBuff extends Action {
     }
 
     /**
-     * Returns the description of the buff.
-     * @param {LogLine} data - Additional data for generating the description.
-     * @return {string} - The description of the buff.
-     */
-    getDescription(data)
-    {
-        return typeof this.desc === 'string' ? this.desc : (typeof this.desc === 'function' ? this.desc(data) : '');
-    }
-
-    /**
-     * If buff is apply on boss.
-     * @return {boolean} - If buff is apply on boss.
-     */
-    isBossDeBuff()
-    {
-        return this.bossDeBuff;
-    }
-
-    /**
      * Sets the state of the action element for the specified player.
      * @param {string|HTMLElement} element - The player name or Element Action.
      * @param {ActionElementState} state - The state to set.
@@ -111,15 +84,13 @@ export class RaidBuff extends Action {
                 element.classList.add("active");
                 element.classList.remove("up");
                 element.innerHTML = "" + this.time;
-                element.style.setProperty(Property.descriptionContent, `"${this.getDescription(data)}"`);
-                element.style.setProperty(Property.descriptionBackgroundColor, "black");
                 break;
             case ActionElementState.Fade:
+                if(!element.hasAttribute("time"))
+                    element.setAttribute("time", "" + Date.now());
                 element.classList.remove("active");
                 element.classList.remove("up");
                 element.innerHTML = "" + (this.cd - this.time);
-                element.style.setProperty(Property.descriptionContent, getDefault(Property.descriptionContent));
-                element.style.setProperty(Property.descriptionBackgroundColor, getDefault(Property.descriptionBackgroundColor));
                 break;
             case ActionElementState.Up:
                 element.classList.remove("active");
@@ -133,13 +104,12 @@ export class RaidBuff extends Action {
     /**
      * test action
      * @param {Player} player - The player.
-     * @param {LogLine|boolean} data - Data Line.
+     * @param {LogLine} data - Data Line.
      */
     test(player, data)
     {
-        return super.test(player, data) && !(!this.isBossDeBuff() && !player.inparty) && this.getActionJobLevel().test(player);
+        return super.test(player, data) && !(player !== self || !this.getActionJobLevel().test(player));
     }
-
 
     /**
      * test and execute action
@@ -151,6 +121,6 @@ export class RaidBuff extends Action {
         if(!this.test(player, data))
             return;
 
-        this.setState(nameToId(player.name), ActionElementState.Active, data);
+        this.setState(nameToId(player.name), this.time > 0 ? ActionElementState.Active : ActionElementState.Fade, data);
     }
 }

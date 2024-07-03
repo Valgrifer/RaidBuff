@@ -1,3 +1,4 @@
+import Property from "../property.js";
 export const cssClass = "action";
 
 /**
@@ -109,6 +110,7 @@ export class Action {
         this._image = image;
         this._ajl = ajl;
         this._players = [];
+        this._active = (localStorage.getItem(`${registry.getName()}.${name}`) || "true") === "true";
     }
 
     /**
@@ -161,6 +163,23 @@ export class Action {
     getPlayers()
     { return this._players; }
 
+    /**
+     * set if Action is active
+     * @param {boolean} value
+     */
+    setActive(value)
+    {
+        this._active = value;
+        localStorage.setItem(`${this.getRegistry().getName()}.${this.getName()}`, value)
+    }
+
+    /**
+     * if Action is active
+     * @return {boolean}
+     */
+    isActive()
+    { return this._active; }
+
     reset()
     {
         this.getPlayers().map(this.getElement.bind(this)).forEach(e => e.remove())
@@ -183,7 +202,7 @@ export class Action {
             div = document.createElement("div");
 
             div.classList.add(cssClass);
-            div.style.backgroundImage = `url("${this.getImage()}")`;
+            div.style.setProperty(Property.image, `url("${this.getImage()}")`);
             div.id = this.getName() + player;
 
             div._classAction = new ActionElement(div, this);
@@ -218,25 +237,23 @@ export class Action {
     }
 
     /**
-     * test and execute action
+     * test action
      * @param {Player} player - The player.
-     * @param {object} data - Data Line.
+     * @param {LogLine} data - Data Line.
+     * @abstract
      */
     test(player, data)
     {
-        if(!this.getID().exec(data.line[4]))
-            return;
-
-        this.execute(player, data);
+        return this.isActive() && !(data !== true && !this.getID().exec(data?.line[4]));
     }
 
     /**
-     * Execute Action for specific player
+     * test and execute action
      * @param {Player} player - The player.
-     * @param {LogLine|undefined} data - Additional data for setting the state.
+     * @param {LogLine} data - Data Line.
      * @abstract
      */
-    execute(player, data)
+    testExecute(player, data)
     {
         throw new Error("Method not implemented.");
     }
