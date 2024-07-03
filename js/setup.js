@@ -34,7 +34,7 @@ export function run() {
         }, ActionJobLevel(Jobs.DNC, 70));
         new RaidBuff(RaidBuffRegistry, "SearingLight", "64C9", "https://xivapi.com/i/002000/002752_hr1.png", 120, 20, "5%", ActionJobLevel(Jobs.SMN, 66));
         new RaidBuff(RaidBuffRegistry, "Embolden", "1D60", "https://xivapi.com/i/003000/003218_hr1.png", 120, 20, "5%", ActionJobLevel(Jobs.RDM, 58));
-        new RaidBuff(RaidBuffRegistry, "Starry Muse", "8773", "https://xivapi.com/i/003000/003826_hr1.png", 120, 20, "5%", ActionJobLevel(Jobs.PCT, 70));
+        new RaidBuff(RaidBuffRegistry, "StarryMuse", "8773", "https://xivapi.com/i/003000/003826_hr1.png", 120, 20, "5%", ActionJobLevel(Jobs.PCT, 70));
         new RaidBuff(RaidBuffRegistry, "Off-guard", "2C93", "https://xivapi.com/i/003000/003279_hr1.png", 60, 15, "5%");
         new RaidBuff(RaidBuffRegistry, "PeculiarLight", "2C9D", "https://xivapi.com/i/003000/003289_hr1.png", 60, 15, "5% Mag");
     }
