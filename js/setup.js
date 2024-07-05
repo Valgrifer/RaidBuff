@@ -14,7 +14,8 @@ export function run() {
         new RaidBuff(RaidBuffRegistry, "Divination", "40A8", "https://xivapi.com/i/003000/003553_hr1.png", 120, 20, "6%", ActionJobLevel(Jobs.AST, 50));
         new RaidBuff(RaidBuffRegistry, "Brotherhood", "1CE4", "https://xivapi.com/i/002000/002542_hr1.png", 120, 20, "5%", ActionJobLevel(Jobs.MNK, 70));
         new RaidBuff(RaidBuffRegistry, "BattleLitany", "DE5", "https://xivapi.com/i/002000/002585_hr1.png", 120, 20, "10% CH", ActionJobLevel(Jobs.DRG, 52));
-        new RaidBuff(RaidBuffRegistry, "Mug", "8C8", "https://xivapi.com/i/000000/000613_hr1.png", 120, 20, "5%", ActionJobLevel(Jobs.NIN, 14), true);
+        new RaidBuff(RaidBuffRegistry, "Mug", "8C8", "https://xivapi.com/i/000000/000613_hr1.png", 120, 20, "5%", ActionJobLevel(Jobs.NIN, 14, 66), true);
+        new RaidBuff(RaidBuffRegistry, "Dokumori", "905D", "https://xivapi.com/i/000000/000619_hr1.png", 120, 20, "5%", ActionJobLevel(Jobs.NIN, 66), true);
         new RaidBuff(RaidBuffRegistry, "ArcaneCircle", "5F55", "https://xivapi.com/i/003000/003633_hr1.png", 120, 20, "3%", ActionJobLevel(Jobs.RPR, 72));
         new RaidBuff(RaidBuffRegistry, "BattleVoice", "76", "https://xivapi.com/i/002000/002601_hr1.png", 120, 20, "20% DH", ActionJobLevel(Jobs.BRD, 50));
         new RaidBuff(RaidBuffRegistry, "RadiantFinale", "64B9", "https://xivapi.com/i/002000/002622_hr1.png", 110, 20, (data) => {
@@ -287,5 +288,5 @@ const template = {
         .replace("%id%", action.getName())
         .replace("%image%", `url(${action.getImage()})`)
         .replace("%active%", action.isActive() ? " active" : "")
-        .replace("%order%", action.getActionJobLevel().job !== Jobs.NONE ? action.getActionJobLevel().lvl : "1000")
+        .replace("%order%", action.getActionJobLevel().job !== Jobs.NONE ? action.getActionJobLevel().minLvl : "1000")
 };
