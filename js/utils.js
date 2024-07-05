@@ -24,6 +24,7 @@ export function isBetween(value, ...between) {
     if (typeof between[between.length-1] === 'object') {
         Object.entries(between[between.length-1])
             .forEach(([k, v]) => option[k] = v);
+        between = between.slice(0, -1);
     }
 
     let result = true;
@@ -56,7 +57,7 @@ export function isBetween(value, ...between) {
  * @param {number} minLvl - The level of the job.
  * @param {number} maxLvl - The level of the job.
  */
-export function ActionJobLevel(job, minLvl, maxLvl) {
+export function ActionJobLevel(job, minLvl, maxLvl= 100) {
     if (!(this instanceof ActionJobLevel)) {
         return new ActionJobLevel(job, minLvl, maxLvl);
     }
@@ -69,17 +70,21 @@ export function ActionJobLevel(job, minLvl, maxLvl) {
         this.job = this.job.map(value => new ActionJobLevel(value, minLvl));
 }
 
+const ActionJobLevelTestLevelOption = {
+    min: 'get',
+};
+
 /**
  * @param {Player} player
  * @return boolean
  */
 ActionJobLevel.prototype.test = function (player) {
     if(typeof this.job === "string")
-        return this.job === player.job?.category && isBetween(player.level, this.minLvl, this.maxLvl);
+        return this.job === player.job?.category && isBetween(player.level, this.minLvl, this.maxLvl, ActionJobLevelTestLevelOption);
     else if(Array.isArray(this.job))
         return this.job.filter(ajl => ajl.test(player)).length > 0;
     else if(this.job instanceof Job)
-        return this.job.id === player.job?.id && isBetween(player.level, this.minLvl, this.maxLvl);
+        return this.job.id === player.job?.id && isBetween(player.level, this.minLvl, this.maxLvl, ActionJobLevelTestLevelOption);
     return false;
 };
 
