@@ -8,21 +8,65 @@ export function nameToId(name) {
 }
 
 /**
+ * @param {number} value
+ * @param {number|{min:"gt"|"get",max:"lt"|"let"}} between
+ * @returns {boolean}
+ */
+export function isBetween(value, ...between) {
+    if (between.length < 2) {
+        throw "'isBetween' need minimum 2 values";
+    }
+    const option = {
+        min: 'gt',
+        max: 'lt',
+    };
+
+    if (typeof between[between.length-1] === 'object') {
+        Object.entries(between[between.length-1])
+            .forEach(([k, v]) => option[k] = v);
+    }
+
+    let result = true;
+
+    if (option.min === 'get') {
+        if (Math.min(...between) > value)
+            result = false;
+    }
+    else {
+        if (Math.min(...between) >= value)
+            result = false;
+    }
+
+    if (option.min === 'let') {
+        if (Math.max(...between) < value)
+            result = false;
+    }
+    else {
+        if (Math.max(...between) <= value)
+            result = false;
+    }
+
+    return result;
+}
+
+/**
  * Represents an Action Job Level.
  * @class
  * @param {Job|JobCategory} job - The ID of the job level.
- * @param {number} lvl - The level of the job.
+ * @param {number} minLvl - The level of the job.
+ * @param {number} maxLvl - The level of the job.
  */
-export function ActionJobLevel(job, lvl) {
+export function ActionJobLevel(job, minLvl, maxLvl) {
     if (!(this instanceof ActionJobLevel)) {
-        return new ActionJobLevel(job, lvl);
+        return new ActionJobLevel(job, minLvl, maxLvl);
     }
 
     this.job = job;
-    this.lvl = lvl;
+    this.minLvl = minLvl;
+    this.maxLvl = maxLvl;
 
     if(Array.isArray(this.job))
-        this.job = this.job.map(value => new ActionJobLevel(value, lvl));
+        this.job = this.job.map(value => new ActionJobLevel(value, minLvl));
 }
 
 /**
@@ -31,11 +75,11 @@ export function ActionJobLevel(job, lvl) {
  */
 ActionJobLevel.prototype.test = function (player) {
     if(typeof this.job === "string")
-        return this.job === player.job?.category && this.lvl <= player.level;
+        return this.job === player.job?.category && isBetween(player.level, this.minLvl, this.maxLvl);
     else if(Array.isArray(this.job))
         return this.job.filter(ajl => ajl.test(player)).length > 0;
     else if(this.job instanceof Job)
-        return this.job.id === player.job?.id && this.lvl <= player.level;
+        return this.job.id === player.job?.id && isBetween(player.level, this.minLvl, this.maxLvl);
     return false;
 };
 
