@@ -33,19 +33,15 @@ export function isBetween(value, ...between) {
         if (Math.min(...between) > value)
             result = false;
     }
-    else {
-        if (Math.min(...between) >= value)
-            result = false;
-    }
+    else if (Math.min(...between) >= value)
+        result = false;
 
-    if (option.min === 'let') {
+    if (option.max === 'let') {
         if (Math.max(...between) < value)
             result = false;
     }
-    else {
-        if (Math.max(...between) <= value)
-            result = false;
-    }
+    else if (Math.max(...between) <= value)
+        result = false;
 
     return result;
 }
@@ -57,7 +53,7 @@ export function isBetween(value, ...between) {
  * @param {number} minLvl - The level of the job.
  * @param {number} maxLvl - The level of the job.
  */
-export function ActionJobLevel(job, minLvl, maxLvl= 100) {
+export function ActionJobLevel(job, minLvl, maxLvl= Infinity) {
     if (!(this instanceof ActionJobLevel)) {
         return new ActionJobLevel(job, minLvl, maxLvl);
     }
@@ -72,6 +68,7 @@ export function ActionJobLevel(job, minLvl, maxLvl= 100) {
 
 const ActionJobLevelTestLevelOption = {
     min: 'get',
+    max: 'let',
 };
 
 /**
